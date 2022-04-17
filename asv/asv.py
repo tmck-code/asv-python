@@ -44,5 +44,10 @@ class ASVReader(ASVIO):
 
 @dataclass
 class ASVWriter(ASVIO):
-    def writerow(self, row: List[str]):
-        print(self.fmt.DELIMITER.join(row), file=self.stream, end=self.fmt.EOL)
+
+    @staticmethod
+    def generate(row: List[str], delimiter = ASV_FORMAT.DELIMITER) -> str:
+        return delimiter.join(row)
+
+    def write_row(self, row: List[str]):
+        print(self.generate(row), file=self.stream, end=self.fmt.EOL)

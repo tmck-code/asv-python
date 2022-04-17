@@ -18,9 +18,18 @@ ASV_FORMAT = Format(
 
 @dataclass
 class ASVIO:
-    stream: io.TextIOWrapper
+    fpath: str
     fmt: Format = ASV_FORMAT
 
+    def ensure_string(coll: list) -> list:
+        return list(map(str, coll))
+
+    def __enter__(self):
+        self.stream: io.TextIOWrapper = open(self.fpath, "w")
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback):
+        self.stream.close()
 
 @dataclass
 class ASVReader(ASVIO):

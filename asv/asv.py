@@ -7,10 +7,12 @@ class Format(NamedTuple):
     EOL: str
     DELIMITER: str
 
-
+# See https://en.wikipedia.org/wiki/Delimiter#ASCII_delimited_text
+# 30 == "record separator", signals the end of a record or row
+# 31 == "unit separator", Between fields of a record, or members of a row. 
 ASV_FORMAT = Format(
-    EOL=chr(29) + "\n",
-    DELIMITER=chr(30),
+    EOL=chr(30) + "\n",
+    DELIMITER=chr(31),
 )
 
 

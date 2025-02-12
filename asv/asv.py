@@ -7,18 +7,29 @@ class Format(NamedTuple):
     EOL: str
     DELIMITER: str
 
-
+# See https://en.wikipedia.org/wiki/Delimiter#ASCII_delimited_text
+# 30 == "record separator", signals the end of a record or row
+# 31 == "unit separator", Between fields of a record, or members of a row. 
 ASV_FORMAT = Format(
-    EOL=chr(29) + "\n",
-    DELIMITER=chr(30),
+    EOL=chr(30) + "\n",
+    DELIMITER=chr(31),
 )
 
 
 @dataclass
 class ASVIO:
-    stream: io.TextIOWrapper
+    fpath: str
     fmt: Format = ASV_FORMAT
 
+    def ensure_string(coll: list) -> list:
+        return list(map(str, coll))
+
+    def __enter__(self):
+        self.stream: io.TextIOWrapper = open(self.fpath, "w")
+        return self
+
+    def __exit__(self, _exc_type, _exc_value, _traceback):
+        self.stream.close()
 
 @dataclass
 class ASVReader(ASVIO):
@@ -33,5 +44,10 @@ class ASVReader(ASVIO):
 
 @dataclass
 class ASVWriter(ASVIO):
-    def writerow(self, row: List[str]):
-        print(self.fmt.DELIMITER.join(row), file=self.stream, end=self.fmt.EOL)
+
+    @staticmethod
+    def generate(row: List[str], delimiter = ASV_FORMAT.DELIMITER) -> str:
+        return delimiter.join(row)
+
+    def write_row(self, row: List[str]):
+        print(self.generate(row), file=self.stream, end=self.fmt.EOL)

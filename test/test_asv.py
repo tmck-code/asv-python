@@ -19,7 +19,8 @@ def test_basic_write() -> None:
         ['123', 'Tom', 'xxx', ''],
         ['124', 'Laura', 'yyy', 'some note here'],
     ]
-    with asv.ASVWriter('test/data.asv') as writer:
+    with open('test/data.asv', 'w') as ostream:
+        writer = asv.ASVWriter(ostream)
         for row in data:
             writer.write_row(row)
 

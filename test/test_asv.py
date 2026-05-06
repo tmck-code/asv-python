@@ -3,24 +3,24 @@ import os
 
 def teardown_module():
     if os.path.exists:
-        os.remove("test/data.asv")
+        os.remove('test/data.asv')
 
 def test_basic_row_generate():
-    data = ["123", "Tom", "xxx", ""]
+    data = ['123', 'Tom', 'xxx', '']
     result = asv.ASVWriter.generate(data)
-    
-    assert result == "lsdkjflsdkjf"
+
+    assert result == f'123\x1fTom\x1fxxx\x1f'
 
 def test_basic_write():
     data = [
-        ["id", "name", "value", "other"],
-        ["123", "Tom", "xxx", ""],
-        ["124", "Laura", "yyy", "some note here"],
+        ['id', 'name', 'value', 'other'],
+        ['123', 'Tom', 'xxx', ''],
+        ['124', 'Laura', 'yyy', 'some note here'],
     ]
-    with asv.ASVWriter("test/data.asv") as writer:
+    with asv.ASVWriter('test/data.asv') as writer:
         for row in data:
             writer.write_row(row)
 
-    result = "\n".split(open("test/data.asv").read())
-
-    assert result == "slkdfjlskjdflkj"
+    result = [l.split('\x1f') for l in open('test/data.asv').read().split('\x1e\n')]
+    expected = data + [['']]
+    assert result == expected

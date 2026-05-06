@@ -36,15 +36,17 @@ data = [
     ["124", "Laura", "yyy", "some note here"],
 ]
 
-with asv.ASVWriter("data.asv") as writer:
+with open("data.asv", "w") as ostream:
+    writer = asv.ASVWriter(ostream)
     for row in data:
         writer.write_row(row)
 
 open('test/data.asv').read()
 # 'id\x1fname\x1fvalue\x1fother\x1e\n123\x1fTom\x1fxxx\x1f\x1e\n124\x1fLaura\x1fyyy\x1fsome note here\x1e\n'
 
-with asv.ASVReader('test/data.asv') as reader:
-    for row in data:
+with open("data.asv") as istream:
+    reader = asv.ASVReader(istream)
+    for row in reader:
         print(row)
 
 # ['id', 'name', 'value', 'other']

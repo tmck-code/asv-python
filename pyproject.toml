@@ -1,6 +1,6 @@
 [project]
 name = "asv-python"
-version = "0.1.0"
+version = "0.1.1"
 description = "Reads and writes table data (CSVs) using ASCII reserved-character separators."
 
 readme = "README.md"
